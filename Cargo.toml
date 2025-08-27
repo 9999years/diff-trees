@@ -1,0 +1,11 @@
+[package]
+name = "diff-trees"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+blake3 = { version = "1.8.2", features = ["mmap"] }
+iddqd = { version = "0.3.11", default-features = false, features = ["std"] }
+owo-colors = "4.2.2"
+tracing = "0.1.41"
+walkdir = "2.5.0"
