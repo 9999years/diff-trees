@@ -10,7 +10,7 @@ use crate::DisplayDiffOpts;
 use crate::PathInfo;
 
 /// A single entry in a diff, identified by a path relative to the diff base directory.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DiffEntry<'a> {
     pub(crate) relative: PathBuf,
     pub(crate) tag: DiffTag,
@@ -100,5 +100,10 @@ impl<'a> DiffEntry<'a> {
             }
         }
         Ok(())
+    }
+
+    #[cfg(test)]
+    pub(crate) fn as_pair(&self) -> (&Path, DiffTag) {
+        (self.relative(), self.tag())
     }
 }
