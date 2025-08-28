@@ -19,6 +19,6 @@ impl<'a> PathInfo<'a> {
     ///
     /// The [`DiffEntry::relative`] field can be joined to the `base` to recover the original path.
     pub fn base(&self) -> &Path {
-        &self.base
+        self.base
     }
 }

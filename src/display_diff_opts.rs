@@ -17,6 +17,6 @@ impl DisplayDiffOpts {
 
     /// Whether to enable terminal colors when displaying the diff.
     pub fn color(self, color: bool) -> Self {
-        Self { color, ..self }
+        Self { color }
     }
 }
