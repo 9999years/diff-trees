@@ -80,6 +80,10 @@ impl<'a> Diff<'a> {
     /// detection][issue-9], and the [ability to produce a text diff of the compared
     /// files][issue-3].
     ///
+    /// Note that directory entries which appear in both trees are considered to be
+    /// [`DiffTag::Replace`]d, but this does not account for whether or not their contents have
+    /// changed. A future version of this library may do something more intuitive in this case.
+    ///
     /// [issue-2]: https://github.com/9999years/diff-trees/issues/2
     /// [issue-9]: https://github.com/9999years/diff-trees/issues/9
     /// [issue-3]: https://github.com/9999years/diff-trees/issues/3
