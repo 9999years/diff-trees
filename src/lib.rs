@@ -79,8 +79,8 @@ impl<'a> Diff<'a> {
             entries: IdOrdMap::new(),
         };
 
-        diff.walk_removed_tree(&old, &new)?;
-        diff.walk_added_tree(&new)?;
+        diff.walk_removed_tree(old, new)?;
+        diff.walk_added_tree(new)?;
 
         Ok(diff)
     }
@@ -138,11 +138,11 @@ impl<'a> Diff<'a> {
                 base: new,
             });
 
-            if removed_entry.file_type().is_dir() {
-                if let DiffTag::Delete = entry.tag {
-                    // Don't recurse if a directory has been removed.
-                    iterator.skip_current_dir();
-                }
+            if removed_entry.file_type().is_dir()
+                && let DiffTag::Delete = entry.tag
+            {
+                // Don't recurse if a directory has been removed.
+                iterator.skip_current_dir();
             }
 
             entry.deleted = Some(PathInfo {
@@ -218,7 +218,7 @@ impl<'a> Diff<'a> {
     /// Note that [`Diff`] already implements [`Display`] with default options, but this method is
     /// available to enable colored output.
     pub fn display(&'a self, opts: DisplayDiffOpts) -> impl Display + 'a {
-        DisplayDiff { diff: &self, opts }
+        DisplayDiff { diff: self, opts }
     }
 }
 
