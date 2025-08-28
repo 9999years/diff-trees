@@ -131,19 +131,33 @@ impl<'a> Diff<'a> {
             };
 
             let candidate = new.join(&entry.relative);
-            let candidate_metadata = candidate.metadata().map_err(|inner| MetadataError {
-                path: candidate.clone(),
-                inner,
-            })?;
+            let candidate_metadata = match candidate.metadata() {
+                Ok(metadata) => Some(metadata),
+                Err(err) => {
+                    if err.kind() == std::io::ErrorKind::NotFound {
+                        None
+                    } else {
+                        return Err(MetadataError {
+                            path: candidate.clone(),
+                            inner: err,
+                        }
+                        .into());
+                    }
+                }
+            };
 
-            entry.tag = candidate_is_same(
-                removed_entry.path(),
-                &removed_metadata,
-                &candidate,
-                &candidate_metadata,
-            )?;
-            entry.inserted = Some(PathInfo {
-                metadata: candidate_metadata,
+            entry.tag = match candidate_metadata.as_ref() {
+                Some(candidate_metadata) => candidate_is_same(
+                    removed_entry.path(),
+                    &removed_metadata,
+                    &candidate,
+                    candidate_metadata,
+                )?,
+                None => DiffTag::Delete,
+            };
+
+            entry.inserted = candidate_metadata.map(|metadata| PathInfo {
+                metadata,
                 base: new,
             });
 
@@ -235,5 +249,110 @@ impl<'a> Diff<'a> {
 impl<'a> Display for Diff<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.display(Default::default()).fmt(f)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use testlib::TempTree;
+
+    #[test]
+    fn test_same_contents() -> Result<()> {
+        let mut old = TempTree::new().unwrap();
+        old.file("puppy", "puppy").unwrap();
+
+        let mut new = TempTree::new().unwrap();
+        new.file("puppy", "puppy").unwrap();
+
+        let diff = Diff::new(old.as_ref(), new.as_ref())?;
+
+        assert_eq!(
+            (&diff)
+                .into_iter()
+                .map(DiffEntry::as_pair)
+                .collect::<Vec<_>>(),
+            vec![(Path::new("puppy"), DiffTag::Equal)]
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_different_contents() -> Result<()> {
+        let mut old = TempTree::new().unwrap();
+        old.file("puppy", "puppy").unwrap();
+
+        let mut new = TempTree::new().unwrap();
+        new.file("puppy", "doggy").unwrap();
+
+        let diff = Diff::new(old.as_ref(), new.as_ref())?;
+
+        assert_eq!(
+            (&diff)
+                .into_iter()
+                .map(DiffEntry::as_pair)
+                .collect::<Vec<_>>(),
+            vec![(Path::new("puppy"), DiffTag::Replace)]
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_complex() -> Result<()> {
+        let mut old = TempTree::new().unwrap();
+        old.dir("a")
+            .unwrap()
+            .file("a/1", "1")
+            .unwrap()
+            .file("a/2", "2")
+            .unwrap()
+            .dir("b")
+            .unwrap()
+            .file("b/1", "1")
+            .unwrap()
+            .file("b/2", "2")
+            .unwrap()
+            .dir("c")
+            .unwrap()
+            .file("c/1", "1")
+            .unwrap()
+            .file("c/2", "2")
+            .unwrap();
+
+        let mut new = TempTree::new().unwrap();
+        new.dir("a")
+            .unwrap()
+            .file("a/1", "1")
+            .unwrap()
+            .file("a/2", "2")
+            .unwrap()
+            .dir("b")
+            .unwrap()
+            .file("b/1", "1x")
+            .unwrap()
+            .file("b/2", "2x")
+            .unwrap();
+
+        let diff = Diff::new(old.as_ref(), new.as_ref())?;
+
+        assert_eq!(
+            (&diff)
+                .into_iter()
+                .map(DiffEntry::as_pair)
+                .collect::<Vec<_>>(),
+            vec![
+                (Path::new("a"), DiffTag::Replace),
+                (Path::new("a/1"), DiffTag::Equal),
+                (Path::new("a/2"), DiffTag::Equal),
+                (Path::new("b"), DiffTag::Replace),
+                (Path::new("b/1"), DiffTag::Replace),
+                (Path::new("b/2"), DiffTag::Replace),
+                (Path::new("c"), DiffTag::Delete),
+            ]
+        );
+
+        Ok(())
     }
 }
