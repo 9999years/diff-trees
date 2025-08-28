@@ -1,4 +1,4 @@
-//! Diff two directory trees and format their results.
+//! Diff two directory trees based on their contents and format the resulting diff.
 //!
 //! Construct a diff with [`diff_treesets`], which produces a [`Diff`], which can be formatted or
 //! inspected.
@@ -73,7 +73,16 @@ impl<'a> IntoIterator for &'a Diff<'a> {
 }
 
 impl<'a> Diff<'a> {
-    /// Diff two paths.
+    /// Diff two directory trees.
+    ///
+    /// Paths are compared for equality with [`blake3`], which has good performance characteristics
+    /// in my testing. In the future, I hope to [add pluggable comparators][issue-2], [rename
+    /// detection][issue-9], and the [ability to produce a text diff of the compared
+    /// files][issue-3].
+    ///
+    /// [issue-2]: https://github.com/9999years/diff-trees/issues/2
+    /// [issue-9]: https://github.com/9999years/diff-trees/issues/9
+    /// [issue-3]: https://github.com/9999years/diff-trees/issues/3
     pub fn new(old: &'a Path, new: &'a Path) -> Result<Self> {
         let mut diff = Self {
             entries: IdOrdMap::new(),
