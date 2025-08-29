@@ -62,3 +62,17 @@ jobs:
 
     - name: Format with Treefmt
       run: nix build --print-build-logs --file . checks.treefmt
+
+  examples-cli:
+    runs-on: ubuntu-latest
+    name: examples/cli.rs
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+
+    - name: Build examples/cli.rs
+      run: nix build --print-build-logs --file . checks.examples-cli
