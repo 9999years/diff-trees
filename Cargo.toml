@@ -15,7 +15,7 @@ publish = false # Don't do `cargo publish`.
 
 [package]
 name = "diff-trees"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = [
     "Rebecca Turner <rbt@sent.as>"
