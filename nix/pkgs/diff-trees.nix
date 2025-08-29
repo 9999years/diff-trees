@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
 
   inherit src;
 
-  cargoHash = "sha256-bPyc59c7WmlQeHMW/wnRz5u0cC+abHQHY1L847e7e9U=";
+  cargoHash = "sha256-54+ElptE4wL+8yVdxB/6scOYUxeCrkflbMWAC/5s+Uw=";
 
   meta = {
     description = "directory tree diffs";
