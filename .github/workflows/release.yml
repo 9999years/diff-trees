@@ -97,7 +97,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_sha: ${{ github.sha }}
-          custom_tag: v${{ needs.version.outputs.version }}
+          # Note: This action automatically applies a prefix for us!
+          custom_tag: ${{ needs.version.outputs.version }}
 
       - name: Create release
         id: create_release
