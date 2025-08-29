@@ -9,5 +9,9 @@ in
 pkgs.diff-treesPackages.diff-trees.overrideAttrs (prev: {
   passthru = (prev.passthru or { }) // {
     inherit pkgs;
+
+    inherit (pkgs.diff-treesPackages)
+      diff-trees
+      ;
   };
 })
