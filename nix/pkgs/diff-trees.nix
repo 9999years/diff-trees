@@ -2,11 +2,12 @@
   lib,
   rustPlatform,
   src,
+  cargo-toml,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "diff-trees";
-  version = "unstable-2025-08-28";
+  version = cargo-toml.package.version;
 
   inherit src;
 
