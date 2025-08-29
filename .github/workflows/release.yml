@@ -90,8 +90,8 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_sha: ${{ github.event.pull_request.merge_commit_sha }}
-          custom_tag: ${{ needs.version.outputs.version }}
+          commit_sha: ${{ github.sha }}
+          custom_tag: v${{ needs.version.outputs.version }}
 
       - name: Create release
         id: create_release
