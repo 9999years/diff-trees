@@ -48,7 +48,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - uses: cachix/install-nix-action@31
+      - uses: cachix/install-nix-action@v31
 
       - name: Get version number
         id: get_cargo_metadata
