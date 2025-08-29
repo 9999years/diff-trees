@@ -1,6 +1,10 @@
+{
+  localSystem ? builtins.currentSystem,
+}:
 let
   sources = import ./npins;
   pkgs = import sources.nixpkgs {
+    inherit localSystem;
     overlays = [
       (import ./nix/overlays/local-pkgs.nix)
     ];
