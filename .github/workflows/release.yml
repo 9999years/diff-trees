@@ -16,6 +16,9 @@ jobs:
   # We make `if_merged` a `needs:` of the other jobs here to only run this
   # workflow on merged PRs.
   if_merged:
+    permissions:
+      issues: write
+      pull-requests: write
     name: Check that PR was merged and not closed
     if: github.event_name == 'workflow_dispatch'
       || (
@@ -85,6 +88,9 @@ jobs:
       - if_merged
       - build
       - version
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: Tag the release
         uses: mathieudutour/github-tag-action@v6.2
