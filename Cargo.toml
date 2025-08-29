@@ -17,6 +17,16 @@ publish = false # Don't do `cargo publish`.
 name = "diff-trees"
 version = "0.1.0"
 edition = "2024"
+authors = [
+    "Rebecca Turner <rbt@sent.as>"
+]
+description = "Diff two directory trees based on their content"
+readme = "README.md"
+homepage = "https://github.com/9999years/diff-trees"
+repository = "https://github.com/9999years/diff-trees"
+license = "MIT"
+keywords = ["diff", "compare"]
+categories = ["filesystem"]
 
 [dependencies]
 blake3 = { version = "1.8.2", features = ["mmap"] }
