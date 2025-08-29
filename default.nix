@@ -12,6 +12,7 @@ pkgs.diff-treesPackages.diff-trees.overrideAttrs (prev: {
 
     inherit (pkgs.diff-treesPackages)
       diff-trees
+      checks
       ;
   };
 })
