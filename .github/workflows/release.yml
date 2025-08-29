@@ -79,7 +79,7 @@ jobs:
           nix run --file . pkgs.cargo -- publish --no-verify
 
   upload:
-    name: Create releas
+    name: Create release
     runs-on: ubuntu-latest
     needs:
       - if_merged
