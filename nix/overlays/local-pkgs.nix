@@ -1,8 +1,8 @@
 final: prev: {
-  diff-treesPackages = final.lib.packagesFromDirectoryRecursive {
+  diff-trees-pkgs = final.lib.packagesFromDirectoryRecursive {
     inherit (final) callPackage newScope;
     directory = ../pkgs;
   };
 
-  diff-trees = final.diff-treesPackages.diff-trees;
+  diff-trees = final.diff-trees-pkgs.diff-trees;
 }
