@@ -19,7 +19,7 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v31
 
-    - name: Build with Nix
+    - name: Build default.nix
       run: nix build --print-build-logs --file .
 
   shell:
