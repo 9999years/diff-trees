@@ -1,7 +1,6 @@
 //! Diff two directory trees based on their contents and format the resulting diff.
 //!
-//! Construct a diff with [`diff_treesets`], which produces a [`Diff`], which can be formatted or
-//! inspected.
+//! Construct a diff with [`Diff::new`], which can be formatted or inspected.
 
 #![deny(missing_docs)]
 
