@@ -3,6 +3,7 @@
   cargo,
   cargo-release,
   git,
+  nix-update,
 }:
 writeShellApplication {
   name = "make-release-commit";
@@ -11,6 +12,7 @@ writeShellApplication {
     cargo
     cargo-release
     git
+    nix-update
   ];
 
   text = ''
@@ -25,5 +27,10 @@ writeShellApplication {
       --execute \
       --no-confirm \
       "$@"
+
+    nix-update \
+        --no-src \
+        --version skip \
+        diff-trees
   '';
 }
