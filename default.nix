@@ -6,11 +6,11 @@ let
     ];
   };
 in
-pkgs.diff-treesPackages.diff-trees.overrideAttrs (prev: {
+pkgs.diff-trees-pkgs.diff-trees.overrideAttrs (prev: {
   passthru = (prev.passthru or { }) // {
     inherit pkgs;
 
-    inherit (pkgs.diff-treesPackages)
+    inherit (pkgs.diff-trees-pkgs)
       diff-trees
       checks
       shell
