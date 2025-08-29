@@ -33,7 +33,7 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v31
 
-    - name: Lint with Clippy
+    - name: Lint Rust code with Clippy
       run: nix build --print-build-logs --file . checks.clippy
 
   treefmt:
